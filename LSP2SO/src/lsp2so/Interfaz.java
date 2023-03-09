@@ -28,32 +28,26 @@ public class Interfaz extends javax.swing.JFrame {
     private void initComponents() {
 
         Fondo = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        Fondo.setBackground(new java.awt.Color(255, 255, 255));
-        Fondo.setForeground(new java.awt.Color(255, 255, 255));
+        Fondo.setBackground(new java.awt.Color(0, 0, 0));
+        Fondo.setForeground(new java.awt.Color(0, 0, 0));
+        Fondo.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        javax.swing.GroupLayout FondoLayout = new javax.swing.GroupLayout(Fondo);
-        Fondo.setLayout(FondoLayout);
-        FondoLayout.setHorizontalGroup(
-            FondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 717, Short.MAX_VALUE)
-        );
-        FondoLayout.setVerticalGroup(
-            FondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 618, Short.MAX_VALUE)
-        );
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fotos/HBOMaxPlusLogo.png"))); // NOI18N
+        Fondo.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, -30, 330, 150));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(Fondo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(Fondo, javax.swing.GroupLayout.DEFAULT_SIZE, 778, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(Fondo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(Fondo, javax.swing.GroupLayout.DEFAULT_SIZE, 694, Short.MAX_VALUE)
         );
 
         pack();
@@ -96,5 +90,6 @@ public class Interfaz extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel Fondo;
+    private javax.swing.JLabel jLabel1;
     // End of variables declaration//GEN-END:variables
 }
