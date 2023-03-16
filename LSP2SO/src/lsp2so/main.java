@@ -9,7 +9,7 @@ package lsp2so;
  *
  * @author matteosancio
  */
-public class Main {
+public class main {
 
     /**
      * @param args the command line arguments
