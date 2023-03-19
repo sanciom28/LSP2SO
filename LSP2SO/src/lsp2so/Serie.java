@@ -69,27 +69,38 @@ public class Serie {
     public Serie() {
 
     }
-
+    
     public void setQuality() {
+        
+    
         Random rand = new Random();
 
-        double introValue = rand.nextDouble();
-        double inicioValue = rand.nextDouble();
-        double cierreValue = rand.nextDouble();
-        double creditosValue = rand.nextDouble();
-
-        //setValues
-        if (introValue <= 0.75) {
-            introQuality = true;
+        if (!introQuality) {
+            double introValue = rand.nextDouble();
+            if (introValue <= 0.75) {
+                introQuality = true;
+            }
         }
-        if (inicioValue <= 0.84) {
-            inicioQuality = true;
+        
+        if (!inicioQuality) {
+            double inicioValue = rand.nextDouble();
+            if (inicioValue <= 0.84) {
+                inicioQuality = true;
+            }
         }
-        if (cierreValue <= 0.80) {
-            cierreQuality = true;
+        
+        if (!cierreQuality) {
+            double cierreValue = rand.nextDouble();
+            if (cierreValue <= 0.8) {
+                cierreQuality = true;
+            }
         }
-        if (creditosValue <= 0.85) {
-            creditosQuality = true;
+        
+        if (!creditosQuality) {
+            double creditosValue = rand.nextDouble();
+            if (creditosValue <= 0.85) {
+                creditosQuality = true;
+            }
         }
 
         if (introQuality && inicioQuality && cierreQuality && creditosQuality) {

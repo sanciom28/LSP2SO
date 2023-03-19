@@ -27,7 +27,7 @@ public class Administrador extends Thread {
     public Administrador(int tiempo, Queue q1, Queue q2, Queue q3, Queue toFight) {
         this.duracionDiaEnSegundos = tiempo;
     }
-
+    
     @Override
     public void run() {
         try {
@@ -43,27 +43,84 @@ public class Administrador extends Thread {
                 serie = (Serie) Interfaz.q1.dequeue();
 
                 //Para q2
-                serie = (Serie) Interfaz.q2.dequeue();
-                if (serie.quality) {
-                    //Si la calidad es buena entonces se aumenta su contador de revision en 1 y la volvemos a encolar, cuando este contador llegue a 8 se sube la prioridad
-                    if (serie.counterForUppingPriority == 8) {
-                        //Se sube de prioridad
-                        Interfaz.q1.enqueue(serie);
+                serie = Interfaz.q2.dequeue();
+                if (!Interfaz.q1.isEmpty()) {
+                    if (serie.quality) {
+                        //Si la calidad es buena entonces se aumenta su contador de revision en 1 y la volvemos a encolar, cuando este contador llegue a 8 se sube la prioridad
+                        if (serie.counterForUppingPriority == 8) {
+                            //Se sube de prioridad
+                            Interfaz.q1.enqueue(serie);
+                            serie.counterForUppingPriority = 0;
+                        } else {
+                            //Se sube el contador
+                            serie.uppingCounter();
+                            Interfaz.q2.enqueue(serie);
+                        }
                     } else {
-                        //Se sube el contador
+                        //Si la calidad no es buena entonces se manda al reforzamiento
                         serie.uppingCounter();
-                        Interfaz.q2.enqueue(serie);
+                        Interfaz.qReinforce.enqueue(serie);
                     }
                 } else {
-                    //Si la calidad no es buena entonces se manda al reforzamiento
+                    //Preempt
+                    if (serie.quality) {
+                        Interfaz.qFight.enqueue(serie);
+                        serie.counterForUppingPriority = 0;
+                    } else {
+                        //TODO: analizar mejor el caunter for opin praioriti
+                        serie.uppingCounter();
+                        Interfaz.qReinforce.enqueue(serie);
+                    }
+                }
+                
+                //Para q3
+                serie = Interfaz.q3.dequeue();
+                if (!Interfaz.q1.isEmpty() && !Interfaz.q2.isEmpty()) {
+                    if (serie.quality) {
+                        //Si la calidad es buena entonces se aumenta su contador de revision en 1 y la volvemos a encolar, cuando este contador llegue a 8 se sube la prioridad
+                        if (serie.counterForUppingPriority == 8) {
+                            //Se sube de prioridad
+                            Interfaz.q2.enqueue(serie);
+                            serie.counterForUppingPriority = 0;
+                        } else {
+                            //Se sube el contador
+                            serie.uppingCounter();
+                            Interfaz.q3.enqueue(serie);
+                        }
+                    } else {
+                        //Si la calidad no es buena entonces se manda al reforzamiento
+                        serie.uppingCounter();
+                        Interfaz.qReinforce.enqueue(serie);
+                    }
+                } else {
+                    //Preempt
+                    if (serie.quality) {
+                        Interfaz.qFight.enqueue(serie);
+                        serie.counterForUppingPriority = 0;
+                    } else {
+                        //TODO: analizar mejor el caunter for opin praioriti
+                        serie.uppingCounter();
+                        Interfaz.qReinforce.enqueue(serie);
+                    }
+                }
+
+                //Para reforzamiento: se saca una serie de la cola y se reinicia la calidad
+                serie = Interfaz.qReinforce.dequeue();
+                serie.setQuality();
+                //si la serie ahora sí es de calidad:
+                if (serie.quality) {
+                    if (serie.priority == 1) {
+                        Interfaz.q1.enqueue(serie);
+                    } else if (serie.priority == 2) {
+                        Interfaz.q2.enqueue(serie);
+                    } else if (serie.priority == 3) {
+                        Interfaz.q3.enqueue(serie);
+                    }
+                } else {
                     Interfaz.qReinforce.enqueue(serie);
                 }
-                //Para q3
-
-                //Para reforzamiento
             }
-        } catch (Exception e) {
-        }
+        } catch (Exception e) {}
     }
 
     public void newSeries() {

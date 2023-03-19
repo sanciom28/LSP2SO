@@ -6,6 +6,7 @@
 package lsp2so;
 import java.util.concurrent.Semaphore;
 import lsp2so.Queue;
+import lsp2so.Serie;
 
 /**
  *
@@ -14,13 +15,13 @@ import lsp2so.Queue;
 public class Interfaz extends javax.swing.JFrame {
 
     //Colas
-    public static Queue q1 = new Queue();
-    public static Queue q2 = new Queue();
-    public static Queue q3 = new Queue();
-    public static Queue qReinforce = new Queue();
-    public static Queue qFight = new Queue();
+    public static Queue<Serie> q1 = new Queue();
+    public static Queue<Serie> q2 = new Queue();
+    public static Queue<Serie> q3 = new Queue();
+    public static Queue<Serie> qReinforce = new Queue();
+    public static Queue<Serie> qFight = new Queue();
     
-    //Semaforo MUTEX para controlar el acceso compartido de Administrador y SO
+    //Semaforo MUTEX para controlar el acceso compartido de Administrador y Procesador
     public static Semaphore mutex = new Semaphore(1);
     
     
