@@ -46,6 +46,6 @@ package lsp2so;
  *
  * @author matteosancio
  */
-public class IA {
+public class IA extends Thread{
     
 }

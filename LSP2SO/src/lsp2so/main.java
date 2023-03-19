@@ -20,17 +20,19 @@ sacar una conclusión.
  */
 package lsp2so;
 
+import java.util.Random;
+
 /**
  *
  * @author matteosancio
  */
-public class main {
+public class Main {
 
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // branches buenas
+
     }
-    
+
 }

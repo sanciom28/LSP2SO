@@ -45,10 +45,96 @@ anterior y sus respectivas series asignadas.
  */
 package lsp2so;
 
+import java.util.Random;
+
 /**
  *
  * @author matteosancio
  */
 public class Serie {
-    
+
+    String id;
+    String type;
+    int idHelperVelma = 1;
+    int idHelperRM = 1;
+    int duration;
+    int priority;
+    int counterForUppingPriority;
+    boolean introQuality = false;
+    boolean inicioQuality = false;
+    boolean cierreQuality = false;
+    boolean creditosQuality = false;
+    boolean quality = false;
+
+    public Serie() {
+
+    }
+
+    public void setQuality() {
+        Random rand = new Random();
+
+        double introValue = rand.nextDouble();
+        double inicioValue = rand.nextDouble();
+        double cierreValue = rand.nextDouble();
+        double creditosValue = rand.nextDouble();
+
+        //setValues
+        if (introValue <= 0.75) {
+            introQuality = true;
+        }
+        if (inicioValue <= 0.84) {
+            inicioQuality = true;
+        }
+        if (cierreValue <= 0.80) {
+            cierreQuality = true;
+        }
+        if (creditosValue <= 0.85) {
+            creditosQuality = true;
+        }
+
+        if (introQuality && inicioQuality && cierreQuality && creditosQuality) {
+            quality = true;
+        }
+
+    }
+
+    public void setDurationAndPriority() {
+        Random rand = new Random();
+        double duration = rand.nextDouble();
+        //setDuration
+        if (duration < 60) {
+            this.duration = (int) duration * 100;
+            this.priority = 3;
+        } else if (duration > 90) {
+            this.duration = (int) duration * 100;
+            this.priority = 1;
+        } else {
+            this.duration = (int) duration * 100;
+            this.priority = 2;
+        }
+    }
+
+    public void setIdAndType() {
+        Random rand = new Random();
+        double generator = rand.nextDouble();
+
+        if (generator < 0.5) {
+            this.type = "VELMA";
+            this.id = "V0" + Integer.toString(this.idHelperVelma);
+            this.idHelperVelma++;
+
+        } else {
+            this.type = "RICK&MORTY";
+            this.id = "RM0" + Integer.toString(this.idHelperRM);
+            this.idHelperRM++;
+        }
+    }
+
+    public void uppingCounter() {
+        this.counterForUppingPriority++;
+    }
+
+    public void resettingCounter() {
+        this.counterForUppingPriority = 0;
+    }
 }

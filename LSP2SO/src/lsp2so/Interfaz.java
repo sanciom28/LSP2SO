@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package lsp2so;
+import java.util.concurrent.Semaphore;
 import lsp2so.Queue;
 
 /**
@@ -13,10 +14,17 @@ import lsp2so.Queue;
 public class Interfaz extends javax.swing.JFrame {
 
     //Colas
-    Queue q1 = new Queue();
-    Queue q2 = new Queue();
-    Queue q3 = new Queue();
-    Queue qRefuerzo = new Queue();
+    public static Queue q1 = new Queue();
+    public static Queue q2 = new Queue();
+    public static Queue q3 = new Queue();
+    public static Queue qReinforce = new Queue();
+    public static Queue qFight = new Queue();
+    
+    //Semaforo MUTEX para controlar el acceso compartido de Administrador y SO
+    public static Semaphore mutex = new Semaphore(1);
+    
+    
+    //Inicializando las variables
     
     public Interfaz() {
         initComponents();
