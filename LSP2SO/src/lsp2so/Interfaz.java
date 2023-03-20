@@ -4,7 +4,9 @@
  * and open the template in the editor.
  */
 package lsp2so;
+
 import java.util.concurrent.Semaphore;
+import javax.swing.JOptionPane;
 import lsp2so.Queue;
 import lsp2so.Serie;
 
@@ -14,19 +16,20 @@ import lsp2so.Serie;
  */
 public class Interfaz extends javax.swing.JFrame {
 
+    int duracionDeDiaEnSegundos = 1;
+
     //Colas
     public static Queue<Serie> q1 = new Queue();
     public static Queue<Serie> q2 = new Queue();
     public static Queue<Serie> q3 = new Queue();
     public static Queue<Serie> qReinforce = new Queue();
     public static Queue<Serie> qFight = new Queue();
-    
+    Administrador tAdmin = new Administrador(duracionDeDiaEnSegundos, q1, q2, q3, qReinforce, qFight);
+
     //Semaforo MUTEX para controlar el acceso compartido de Administrador y Procesador
     public static Semaphore mutex = new Semaphore(1);
-    
-    
+
     //Inicializando las variables
-    
     public Interfaz() {
         initComponents();
     }
@@ -65,6 +68,13 @@ public class Interfaz extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         background = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
+        jScrollPane6 = new javax.swing.JScrollPane();
+        actionLogTextArea = new javax.swing.JTextArea();
+        jLabel12 = new javax.swing.JLabel();
+        jScrollPane7 = new javax.swing.JScrollPane();
+        winnersTextArea = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -72,10 +82,20 @@ public class Interfaz extends javax.swing.JFrame {
 
         agregarVariable.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         agregarVariable.setText("Agregar Variables");
+        agregarVariable.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                agregarVariableActionPerformed(evt);
+            }
+        });
         jPanel1.add(agregarVariable, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 20, -1, -1));
 
         iniciarSimulacion.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         iniciarSimulacion.setText("Iniciar simulacion");
+        iniciarSimulacion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                iniciarSimulacionActionPerformed(evt);
+            }
+        });
         jPanel1.add(iniciarSimulacion, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 50, -1, -1));
 
         jLabel1.setBackground(new java.awt.Color(255, 255, 255));
@@ -165,10 +185,34 @@ public class Interfaz extends javax.swing.JFrame {
         jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 540, 210, -1));
 
         background.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fotos/background.png"))); // NOI18N
-        jPanel1.add(background, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 0, 840, 600));
+        jPanel1.add(background, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 0, 1030, 600));
 
         jLabel9.setText("RECUERDA HACER LAS BENDITAS VALIDACIONES COÑO");
         jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 140, 120, 110));
+
+        jLabel10.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel10.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        jLabel10.setText("Inteligencia Artificial (Procesador)");
+        jLabel10.setOpaque(true);
+        jPanel1.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 80, -1, -1));
+
+        jLabel11.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel11.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        jLabel11.setText("Action Log");
+        jLabel11.setOpaque(true);
+
+        actionLogTextArea.setColumns(20);
+        actionLogTextArea.setRows(5);
+        jScrollPane6.setViewportView(actionLogTextArea);
+
+        jLabel12.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel12.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        jLabel12.setText("Winners");
+        jLabel12.setOpaque(true);
+
+        winnersTextArea.setColumns(20);
+        winnersTextArea.setRows(5);
+        jScrollPane7.setViewportView(winnersTextArea);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -176,17 +220,61 @@ public class Interfaz extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 810, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 16, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane7)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 213, Short.MAX_VALUE)
+                                .addContainerGap())
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(jLabel11)
+                                .addGap(61, 61, 61))))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel12)
+                        .addGap(71, 71, 71))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 574, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 18, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(26, 26, 26)
+                .addComponent(jLabel11)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel12)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane7)
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void iniciarSimulacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_iniciarSimulacionActionPerformed
+        tAdmin.setTextArea(actionLogTextArea);
+        tAdmin.start();
+    }//GEN-LAST:event_iniciarSimulacionActionPerformed
+
+    private void agregarVariableActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_agregarVariableActionPerformed
+        while (true) {
+            //TODO: AGREGAR OTRAS VARIABLES
+            String inputSecondsAsDays = JOptionPane.showInputDialog(null, "Tiempo (en segundos) que dura un dia: ");
+            try {
+                duracionDeDiaEnSegundos = Integer.parseInt(inputSecondsAsDays);
+
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, "Ha ocurrido un error, ¡por favor ingrese valores correctos!");
+            }
+            break;
+        }
+    }//GEN-LAST:event_agregarVariableActionPerformed
 
     /**
      * @param args the command line arguments
@@ -224,6 +312,7 @@ public class Interfaz extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextArea actionLogTextArea;
     private javax.swing.JButton agregarVariable;
     private javax.swing.JTextArea arena;
     private javax.swing.JTextField arenaStatus;
@@ -231,6 +320,9 @@ public class Interfaz extends javax.swing.JFrame {
     private javax.swing.JButton iniciarSimulacion;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -245,9 +337,12 @@ public class Interfaz extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JScrollPane jScrollPane6;
+    private javax.swing.JScrollPane jScrollPane7;
     private javax.swing.JTextArea q1TextArea;
     private javax.swing.JTextArea q2TextArea;
     private javax.swing.JTextArea q3TextArea;
     private javax.swing.JTextArea qRefuerzoTextArea;
+    private javax.swing.JTextArea winnersTextArea;
     // End of variables declaration//GEN-END:variables
 }

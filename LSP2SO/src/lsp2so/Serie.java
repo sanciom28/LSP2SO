@@ -69,10 +69,9 @@ public class Serie {
     public Serie() {
 
     }
-    
+
     public void setQuality() {
-        
-    
+
         Random rand = new Random();
 
         if (!introQuality) {
@@ -81,21 +80,21 @@ public class Serie {
                 introQuality = true;
             }
         }
-        
+
         if (!inicioQuality) {
             double inicioValue = rand.nextDouble();
             if (inicioValue <= 0.84) {
                 inicioQuality = true;
             }
         }
-        
+
         if (!cierreQuality) {
             double cierreValue = rand.nextDouble();
             if (cierreValue <= 0.8) {
                 cierreQuality = true;
             }
         }
-        
+
         if (!creditosQuality) {
             double creditosValue = rand.nextDouble();
             if (creditosValue <= 0.85) {
@@ -107,6 +106,26 @@ public class Serie {
             quality = true;
         }
 
+    }
+
+    public int getPriority() {
+        return priority;
+    }
+
+    public void setPriority(int priority) {
+        this.priority = priority;
+    }
+
+    public void setRandomPriority() {
+        Random rand = new Random();
+        this.priority = rand.nextInt(5);
+    }
+    
+    public void setDataForNewSeries() {
+        setRandomPriority();
+        setDurationAndPriority();
+        setIdAndType();
+        setQuality();
     }
 
     public void setDurationAndPriority() {

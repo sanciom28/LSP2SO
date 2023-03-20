@@ -115,6 +115,8 @@ public class Queue<T> {
 
         return null;
     }
+    
+    
 
 //    
 //    public boolean searchNodo<T>(Object x){
@@ -241,6 +243,30 @@ public class Queue<T> {
 //             
 //            
 //    }
+
+    public Nodo<T> getFront() {
+        return front;
+    }
+
+    public void setFront(Nodo<T> front) {
+        this.front = front;
+    }
+
+    public Nodo<T> getRear() {
+        return rear;
+    }
+
+    public void setRear(Nodo<T> rear) {
+        this.rear = rear;
+    }
+
+    public int getSize() {
+        return size;
+    }
+
+    public void setSize(int size) {
+        this.size = size;
+    }
    
 
 }
