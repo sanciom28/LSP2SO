@@ -42,10 +42,53 @@ su salario en un 10% (Extra).
  */
 package lsp2so;
 
+import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author matteosancio
  */
 public class Procesador extends Thread{
+    
+    int tiempo = (4 + 1 + 10) * 1000;
+    
+    public void queEmpieceLaNhaza() {
+            
+        Random rand = new Random();
+        Serie s1 = Interfaz.qFight.dequeue();
+        Serie s2 = Interfaz.qFight.dequeue();
+            
+        try {
+            //15 segundos mientras las series "batallan"
+            Thread.sleep(tiempo);
+            //a decidir el ganador!!
+            double p = rand.nextDouble();
+            
+            if (p < 0.4) {
+                //alguna de las dos series saldrá al mercado
+                if (p < 0.2) {
+                    //TODO: escribir en el txt la serie 1
+                    Interfaz.q1.enqueue(s2);
+                } else {
+                    //TODO: escribir en el txt la serie 2
+                    Interfaz.q1.enqueue(s1);
+                }
+            } else if (p < 0.67) {
+                //las series empatan, se encolan donde estaban
+                Interfaz.q1.enqueue(s1);
+                Interfaz.q1.enqueue(s2);
+            } else {
+                //ambas son mi**da, de vuelta a refuerzo
+                Interfaz.qReinforce.enqueue(s1);
+                Interfaz.qReinforce.enqueue(s2);
+            }
+            
+        } catch (InterruptedException ex) {
+            Logger.getLogger(Procesador.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }
     
 }
