@@ -55,39 +55,49 @@ public class Procesador extends Thread{
     int tiempo = (4 + 1 + 10) * 1000;
     
     public void queEmpieceLaNhaza() {
+        
+        if (Interfaz.qFight.queueSize() >= 2) {
             
-        Random rand = new Random();
-        Serie s1 = Interfaz.qFight.dequeue();
-        Serie s2 = Interfaz.qFight.dequeue();
+            Random rand = new Random();
             
-        try {
-            //15 segundos mientras las series "batallan"
-            Thread.sleep(tiempo);
-            //a decidir el ganador!!
-            double p = rand.nextDouble();
-            
-            if (p < 0.4) {
-                //alguna de las dos series saldrá al mercado
-                if (p < 0.2) {
-                    //TODO: escribir en el txt la serie 1
-                    Interfaz.q1.enqueue(s2);
+            try {
+                //Se adquiere permisos en el mutex
+                Interfaz.mutex.acquire();
+                
+                Serie s1 = Interfaz.qFight.dequeue();
+                Serie s2 = Interfaz.qFight.dequeue();
+                
+                //15 segundos mientras las series "batallan"
+                Thread.sleep(tiempo);
+                //a decidir el ganador!!
+                double p = rand.nextDouble();
+
+                if (p < 0.4) {
+                    //alguna de las dos series saldrá al mercado
+                    if (p < 0.2) {
+                        //TODO: escribir en el txt la serie 1
+                    } else {
+                        //TODO: escribir en el txt la serie 2
+                    }
+                } else if (p < 0.67) {
+                    //las series empatan, se encolan donde estaban
+                    Interfaz.qFight.enqueue(s1);
+                    Interfaz.qFight.enqueue(s2);
                 } else {
-                    //TODO: escribir en el txt la serie 2
-                    Interfaz.q1.enqueue(s1);
+                    //ambas son mi**da, de vuelta a refuerzo
+                    Interfaz.qReinforce.enqueue(s1);
+                    Interfaz.qReinforce.enqueue(s2);
                 }
-            } else if (p < 0.67) {
-                //las series empatan, se encolan donde estaban
-                Interfaz.q1.enqueue(s1);
-                Interfaz.q1.enqueue(s2);
-            } else {
-                //ambas son mi**da, de vuelta a refuerzo
-                Interfaz.qReinforce.enqueue(s1);
-                Interfaz.qReinforce.enqueue(s2);
+                //Suelta el mutex
+                Interfaz.mutex.release();
+                
+            } catch (InterruptedException ex) {
+                Logger.getLogger(Procesador.class.getName()).log(Level.SEVERE, null, ex);
             }
             
-        } catch (InterruptedException ex) {
-            Logger.getLogger(Procesador.class.getName()).log(Level.SEVERE, null, ex);
         }
+            
+        
         
     }
     
