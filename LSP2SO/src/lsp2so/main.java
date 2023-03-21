@@ -20,18 +20,23 @@ sacar una conclusión.
  */
 package lsp2so;
 
+import lsp2so.Interfaz;
+
 import java.util.Random;
 
 /**
  *
  * @author matteosancio
  */
-public class main {
+public class Main {
 
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        Interfaz interfaz = new Interfaz();
+        interfaz.setLocationRelativeTo(null);
+        interfaz.setVisible(true);
 
     }
 

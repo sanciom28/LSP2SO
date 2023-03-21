@@ -16,7 +16,10 @@ import lsp2so.Serie;
  */
 public class Interfaz extends javax.swing.JFrame {
 
-    int duracionDeDiaEnSegundos = 1;
+    int duracionDeDiaEnSegundos = 2;
+    public static int idHelperVelma = 0;
+    public static int idHelperRM = 0;
+    public static int counterForNewSeries = 0;
 
     //Colas
     public static Queue<Serie> q1 = new Queue();
@@ -27,6 +30,7 @@ public class Interfaz extends javax.swing.JFrame {
     public static Queue<Serie> qWinners = new Queue();
 
     Administrador tAdmin = new Administrador(duracionDeDiaEnSegundos, q1, q2, q3, qReinforce, qFight);
+    Procesador tProcesador = new Procesador(duracionDeDiaEnSegundos);
 
     //Semaforo MUTEX para controlar el acceso compartido de Administrador y Procesador
     public static Semaphore mutex = new Semaphore(1);
@@ -34,6 +38,167 @@ public class Interfaz extends javax.swing.JFrame {
     //Inicializando las variables
     public Interfaz() {
         initComponents();
+    }
+
+    public void create6NewSeriesToStart() {
+        Serie newSeries1 = new Serie();
+        newSeries1.setDataForNewSeries();
+        Serie newSeries2 = new Serie();
+        newSeries2.setDataForNewSeries();
+        Serie newSeries3 = new Serie();
+        newSeries3.setDataForNewSeries();
+        Serie newSeries4 = new Serie();
+        newSeries4.setDataForNewSeries();
+        Serie newSeries5 = new Serie();
+        newSeries5.setDataForNewSeries();
+        Serie newSeries6 = new Serie();
+        newSeries6.setDataForNewSeries();
+        Serie newSeries7 = new Serie();
+        newSeries7.setDataForNewSeries();
+        Serie newSeries8 = new Serie();
+        newSeries8.setDataForNewSeries();
+        Serie newSeries9 = new Serie();
+        newSeries9.setDataForNewSeries();
+        Serie newSeries10 = new Serie();
+        newSeries10.setDataForNewSeries();
+
+        switch (newSeries1.getPriority()) {
+            case 1:
+                Interfaz.q1.enqueue(newSeries1);
+                break;
+            case 2:
+                Interfaz.q2.enqueue(newSeries1);
+                break;
+            case 3:
+                Interfaz.q3.enqueue(newSeries1);
+                break;
+            default:
+                break;
+        }
+        switch (newSeries2.getPriority()) {
+            case 1:
+                Interfaz.q1.enqueue(newSeries2);
+                break;
+            case 2:
+                Interfaz.q2.enqueue(newSeries2);
+                break;
+            case 3:
+                Interfaz.q3.enqueue(newSeries2);
+                break;
+            default:
+                break;
+        }
+        switch (newSeries3.getPriority()) {
+            case 1:
+                Interfaz.q1.enqueue(newSeries3);
+                break;
+            case 2:
+                Interfaz.q2.enqueue(newSeries3);
+                break;
+            case 3:
+                Interfaz.q3.enqueue(newSeries3);
+                break;
+            default:
+                break;
+        }
+
+        switch (newSeries4.getPriority()) {
+            case 1:
+                Interfaz.q1.enqueue(newSeries4);
+                break;
+            case 2:
+                Interfaz.q2.enqueue(newSeries4);
+                break;
+            case 3:
+                Interfaz.q3.enqueue(newSeries4);
+                break;
+            default:
+                break;
+        }
+
+        switch (newSeries5.getPriority()) {
+            case 1:
+                Interfaz.q1.enqueue(newSeries5);
+                break;
+            case 2:
+                Interfaz.q2.enqueue(newSeries5);
+                break;
+            case 3:
+                Interfaz.q3.enqueue(newSeries5);
+                break;
+            default:
+                break;
+        }
+
+        switch (newSeries6.getPriority()) {
+            case 1:
+                Interfaz.q1.enqueue(newSeries6);
+                break;
+            case 2:
+                Interfaz.q2.enqueue(newSeries6);
+                break;
+            case 3:
+                Interfaz.q3.enqueue(newSeries6);
+                break;
+            default:
+                break;
+        }
+        
+        switch (newSeries7.getPriority()) {
+            case 1:
+                Interfaz.q1.enqueue(newSeries7);
+                break;
+            case 2:
+                Interfaz.q2.enqueue(newSeries7);
+                break;
+            case 3:
+                Interfaz.q3.enqueue(newSeries7);
+                break;
+            default:
+                break;
+        }
+        
+        switch (newSeries8.getPriority()) {
+            case 1:
+                Interfaz.q1.enqueue(newSeries8);
+                break;
+            case 2:
+                Interfaz.q2.enqueue(newSeries8);
+                break;
+            case 3:
+                Interfaz.q3.enqueue(newSeries8);
+                break;
+            default:
+                break;
+        }
+        
+        switch (newSeries9.getPriority()) {
+            case 1:
+                Interfaz.q1.enqueue(newSeries9);
+                break;
+            case 2:
+                Interfaz.q2.enqueue(newSeries9);
+                break;
+            case 3:
+                Interfaz.q3.enqueue(newSeries9);
+                break;
+            default:
+                break;
+        }
+        
+        switch (newSeries10.getPriority()) {
+            case 1:
+                Interfaz.q1.enqueue(newSeries10);
+                break;
+            case 2:
+                Interfaz.q2.enqueue(newSeries10);
+                break;
+            case 3:
+                Interfaz.q3.enqueue(newSeries10);
+                break;
+            default:
+                break;
+        }
     }
 
     /**
@@ -50,7 +215,7 @@ public class Interfaz extends javax.swing.JFrame {
         iniciarSimulacion = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        arena = new javax.swing.JTextArea();
+        qFightTextArea = new javax.swing.JTextArea();
         jLabel2 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         q1TextArea = new javax.swing.JTextArea();
@@ -60,12 +225,12 @@ public class Interfaz extends javax.swing.JFrame {
         jScrollPane4 = new javax.swing.JScrollPane();
         q3TextArea = new javax.swing.JTextArea();
         jScrollPane5 = new javax.swing.JScrollPane();
-        qRefuerzoTextArea = new javax.swing.JTextArea();
+        qReinforceTextArea = new javax.swing.JTextArea();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
-        arenaStatus = new javax.swing.JTextField();
+        processorStatusTextField = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         background = new javax.swing.JLabel();
@@ -76,7 +241,7 @@ public class Interfaz extends javax.swing.JFrame {
         actionLogTextArea = new javax.swing.JTextArea();
         jLabel12 = new javax.swing.JLabel();
         jScrollPane7 = new javax.swing.JScrollPane();
-        winnersTextArea = new javax.swing.JTextArea();
+        qWinnersTextArea = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -106,9 +271,9 @@ public class Interfaz extends javax.swing.JFrame {
         jLabel1.setOpaque(true);
         jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 80, -1, -1));
 
-        arena.setColumns(20);
-        arena.setRows(5);
-        jScrollPane1.setViewportView(arena);
+        qFightTextArea.setColumns(20);
+        qFightTextArea.setRows(5);
+        jScrollPane1.setViewportView(qFightTextArea);
 
         jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 170, 228, 148));
 
@@ -143,9 +308,9 @@ public class Interfaz extends javax.swing.JFrame {
 
         jPanel1.add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 390, 150, 130));
 
-        qRefuerzoTextArea.setColumns(20);
-        qRefuerzoTextArea.setRows(5);
-        jScrollPane5.setViewportView(qRefuerzoTextArea);
+        qReinforceTextArea.setColumns(20);
+        qReinforceTextArea.setRows(5);
+        jScrollPane5.setViewportView(qReinforceTextArea);
 
         jPanel1.add(jScrollPane5, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 390, 150, 130));
 
@@ -174,7 +339,7 @@ public class Interfaz extends javax.swing.JFrame {
         jLabel7.setText("Status");
         jLabel7.setOpaque(true);
         jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 120, -1, -1));
-        jPanel1.add(arenaStatus, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 120, 110, -1));
+        jPanel1.add(processorStatusTextField, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 120, 110, -1));
 
         jLabel8.setBackground(new java.awt.Color(255, 255, 255));
         jLabel8.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
@@ -212,9 +377,9 @@ public class Interfaz extends javax.swing.JFrame {
         jLabel12.setText("Winners");
         jLabel12.setOpaque(true);
 
-        winnersTextArea.setColumns(20);
-        winnersTextArea.setRows(5);
-        jScrollPane7.setViewportView(winnersTextArea);
+        qWinnersTextArea.setColumns(20);
+        qWinnersTextArea.setRows(5);
+        jScrollPane7.setViewportView(qWinnersTextArea);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -260,8 +425,22 @@ public class Interfaz extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void iniciarSimulacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_iniciarSimulacionActionPerformed
-        tAdmin.setTextArea(actionLogTextArea);
+        tAdmin.setTextAreaActionLog(actionLogTextArea);
+        tAdmin.setTextAreaQ1(q1TextArea);
+        tAdmin.setTextAreaQ2(q2TextArea);
+        tAdmin.setTextAreaQ3(q3TextArea);
+        tAdmin.setTextAreaQReinforce(qReinforceTextArea);
+        tAdmin.setTextAreaQWinners(qWinnersTextArea);
+        tAdmin.setTextAreaQFight(qFightTextArea);
+
+        tProcesador.setStatusTextField(processorStatusTextField);
+        tProcesador.setStatusArenaTextArea(qFightTextArea);
+        processorStatusTextField.setText("IDLE");
+
+        create6NewSeriesToStart();
+
         tAdmin.start();
+        tProcesador.start();
     }//GEN-LAST:event_iniciarSimulacionActionPerformed
 
     private void agregarVariableActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_agregarVariableActionPerformed
@@ -316,8 +495,6 @@ public class Interfaz extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextArea actionLogTextArea;
     private javax.swing.JButton agregarVariable;
-    private javax.swing.JTextArea arena;
-    private javax.swing.JTextField arenaStatus;
     private javax.swing.JLabel background;
     private javax.swing.JButton iniciarSimulacion;
     private javax.swing.JButton jButton1;
@@ -341,10 +518,12 @@ public class Interfaz extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JScrollPane jScrollPane7;
+    private javax.swing.JTextField processorStatusTextField;
     private javax.swing.JTextArea q1TextArea;
     private javax.swing.JTextArea q2TextArea;
     private javax.swing.JTextArea q3TextArea;
-    private javax.swing.JTextArea qRefuerzoTextArea;
-    private javax.swing.JTextArea winnersTextArea;
+    private javax.swing.JTextArea qFightTextArea;
+    private javax.swing.JTextArea qReinforceTextArea;
+    private javax.swing.JTextArea qWinnersTextArea;
     // End of variables declaration//GEN-END:variables
 }

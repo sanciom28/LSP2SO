@@ -46,6 +46,7 @@ anterior y sus respectivas series asignadas.
 package lsp2so;
 
 import java.util.Random;
+import lsp2so.Interfaz;
 
 /**
  *
@@ -55,8 +56,6 @@ public class Serie {
 
     String id;
     String type;
-    int idHelperVelma = 1;
-    int idHelperRM = 1;
     int duration;
     int priority;
     int counterForUppingPriority;
@@ -116,26 +115,21 @@ public class Serie {
         this.priority = priority;
     }
 
-    public void setRandomPriority() {
-        Random rand = new Random();
-        this.priority = rand.nextInt(5);
-    }
-    
     public void setDataForNewSeries() {
-        setRandomPriority();
         setDurationAndPriority();
         setIdAndType();
         setQuality();
+
     }
 
     public void setDurationAndPriority() {
         Random rand = new Random();
         double duration = rand.nextDouble();
-        //setDuration
-        if (duration < 60) {
+        //Se coloca la prioridad dependiendo de la duracion
+        if (duration <= 0.33) {
             this.duration = (int) duration * 100;
             this.priority = 3;
-        } else if (duration > 90) {
+        } else if (duration >= 0.67) {
             this.duration = (int) duration * 100;
             this.priority = 1;
         } else {
@@ -150,13 +144,13 @@ public class Serie {
 
         if (generator < 0.5) {
             this.type = "VELMA";
-            this.id = "V0" + Integer.toString(this.idHelperVelma);
-            this.idHelperVelma++;
+            Interfaz.idHelperVelma++;
+            this.id = "V0" + Integer.toString(Interfaz.idHelperVelma);
 
         } else {
             this.type = "RICK&MORTY";
-            this.id = "RM0" + Integer.toString(this.idHelperRM);
-            this.idHelperRM++;
+            Interfaz.idHelperRM++;
+            this.id = "R0" + Integer.toString(Interfaz.idHelperRM);
         }
     }
 

@@ -43,9 +43,10 @@ su salario en un 10% (Extra).
 package lsp2so;
 
 import java.util.Random;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import lsp2so.Administrador;
+import lsp2so.Interfaz;
 
 /**
  *
@@ -53,64 +54,89 @@ import lsp2so.Administrador;
  */
 public class Procesador extends Thread {
 
-    int tiempo = (4 + 1 + 10) * 1000;
+    int duracionDiaEnSegundos;
+    int tiempo = 1000 * (4 + 1 + 10) * duracionDiaEnSegundos;
+    JTextField statusTextField;
+    JTextArea statusArenaTextArea;
 
-     
+    public JTextArea getStatusArenaTextArea() {
+        return statusArenaTextArea;
+    }
+
+    public void setStatusArenaTextArea(JTextArea statusArenaTextArea) {
+        this.statusArenaTextArea = statusArenaTextArea;
+    }
+
+    public Procesador(int duracionDiaEnSegundos) {
+        this.duracionDiaEnSegundos = duracionDiaEnSegundos;
+    }
+
+    public JTextField getStatusTextField() {
+        return statusTextField;
+    }
+
+    public void setStatusTextField(JTextField textField) {
+        this.statusTextField = textField;
+    }
+
     @Override
     public void run() {
         Serie serie1 = new Serie();
         Serie serie2 = new Serie();
-
-        if (Interfaz.qFight.queueSize() >= 2) {
-            Random rand = new Random();
+        while (true) {
             try {
-                //Se adquiere permisos en el mutex
                 Interfaz.mutex.acquire();
+                if (Interfaz.qFight.queueSize() >= 2) {
+                    Random rand = new Random();
 
-                serie1 = (Serie) Interfaz.qFight.dequeue();
-                serie2 = (Serie) Interfaz.qFight.dequeue();
+                    statusTextField.setText("WORKING");
+                    serie1 = (Serie) Interfaz.qFight.dequeue();
+                    serie2 = (Serie) Interfaz.qFight.dequeue();
 
-                //15 segundos mientras las series "batallan"
-                Thread.sleep(tiempo);
+                    //15 segundos mientras las series "batallan"
+                    Thread.sleep(tiempo);
 
-                //a decidir el ganador!!
-                //A
-                double p = rand.nextDouble();
-                if (p <= 0.4) {
-                    //alguna de las dos series saldrá al mercado
-                    if (p <= 0.2) {
-                        Administrador.message += serie1.id + "---" + "(Winner!) qFight -> qWinners/n";
-                        Interfaz.qWinners.enqueue(serie1);
+                    //a decidir el ganador!!
+                    //A
+                    double p = rand.nextDouble();
+                    if (p <= 0.4) {
+                        //alguna de las dos series saldrá al mercado
+                        if (p <= 0.2) {
+                            Administrador.message += serie1.id + "---" + "(Winner!) qFight -> qWinners\n";
+                            Interfaz.qWinners.enqueue(serie1);
+                        } else {
+                            Interfaz.qWinners.enqueue(serie2);
+                            Administrador.message += serie2.id + "---" + "(Winner!) qFight -> qWinners\n";
+                        }
+                    } else if (p <= 0.67) {
+                        //B
+                        //Se empata, se devuelven a qFight
+                        Administrador.message += serie1.id + serie2.id + "---" + "(Tie!) qFight -> qFight\n";
+                        serie1.setPriority(0);
+                        serie2.setPriority(0);
+                        Interfaz.qFight.enqueue(serie1);
+                        Interfaz.qFight.enqueue(serie2);
                     } else {
-                        Interfaz.qWinners.enqueue(serie2);
-                        Administrador.message += serie2.id + "---" + "(Winner!) qFight -> qWinners/n";
+                        //Por falta de calidad, se devuelven a qReinforce
+                        //C
+                        Administrador.message += serie1.id + serie2.id + "---" + "(Low Quality!) qFight -> qReinforce\n";
+                        serie1.setPriority(0);
+                        serie2.setPriority(0);
+                        Interfaz.qReinforce.enqueue(serie1);
                     }
-                } else if (p <= 0.67) {
-                    //B
-                    //Se empata, se devuelven a qFight
-                    Administrador.message += serie1.id + serie2.id + "---" + "(Tie!) qFight -> qFight/n";
-                    serie1.setPriority(0);
-                    serie2.setPriority(0);
-                    Interfaz.qFight.enqueue(serie1);
-                    Interfaz.qFight.enqueue(serie2);
-                } else {
-                    //Por falta de calidad, se devuelven a qReinforce
-                    //C
-                    Administrador.message += serie1.id + serie2.id + "---" + "(Low Quality!) qFight -> qReinforce/n";
-                    serie1.setPriority(0);
-                    serie2.setPriority(0);
-                    Interfaz.qReinforce.enqueue(serie1);
-                }
-                //Suelta el mutex
-                Interfaz.mutex.release();
+                    //Suelta el mutex
+                    statusTextField.setText("IDLE");
+                    Interfaz.counterForNewSeries++;
+                    Interfaz.mutex.release();
 
-            } catch (InterruptedException ex) {
-                Logger.getLogger(Procesador.class.getName()).log(Level.SEVERE, null, ex);
+                } else {
+                    statusTextField.setText("IDLE");
+                    Interfaz.mutex.release();
+
+                }
+            } catch (Exception e) {
             }
 
-        } else {
-
-            Administrador.message += "(Failed to battle)/n";
         }
 
     }
