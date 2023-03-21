@@ -24,6 +24,8 @@ public class Interfaz extends javax.swing.JFrame {
     public static Queue<Serie> q3 = new Queue();
     public static Queue<Serie> qReinforce = new Queue();
     public static Queue<Serie> qFight = new Queue();
+    public static Queue<Serie> qWinners = new Queue();
+
     Administrador tAdmin = new Administrador(duracionDeDiaEnSegundos, q1, q2, q3, qReinforce, qFight);
 
     //Semaforo MUTEX para controlar el acceso compartido de Administrador y Procesador

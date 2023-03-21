@@ -45,60 +45,74 @@ package lsp2so;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import lsp2so.Administrador;
 
 /**
  *
  * @author matteosancio
  */
-public class Procesador extends Thread{
-    
+public class Procesador extends Thread {
+
     int tiempo = (4 + 1 + 10) * 1000;
-    
-    public void queEmpieceLaNhaza() {
-        
+
+     
+    @Override
+    public void run() {
+        Serie serie1 = new Serie();
+        Serie serie2 = new Serie();
+
         if (Interfaz.qFight.queueSize() >= 2) {
-            
             Random rand = new Random();
-            
             try {
                 //Se adquiere permisos en el mutex
                 Interfaz.mutex.acquire();
-                
-                Serie s1 = Interfaz.qFight.dequeue();
-                Serie s2 = Interfaz.qFight.dequeue();
-                
+
+                serie1 = (Serie) Interfaz.qFight.dequeue();
+                serie2 = (Serie) Interfaz.qFight.dequeue();
+
                 //15 segundos mientras las series "batallan"
                 Thread.sleep(tiempo);
-                //a decidir el ganador!!
-                double p = rand.nextDouble();
 
-                if (p < 0.4) {
+                //a decidir el ganador!!
+                //A
+                double p = rand.nextDouble();
+                if (p <= 0.4) {
                     //alguna de las dos series saldrá al mercado
-                    if (p < 0.2) {
-                        //TODO: escribir en el txt la serie 1
+                    if (p <= 0.2) {
+                        Administrador.message += serie1.id + "---" + "(Winner!) qFight -> qWinners/n";
+                        Interfaz.qWinners.enqueue(serie1);
                     } else {
-                        //TODO: escribir en el txt la serie 2
+                        Interfaz.qWinners.enqueue(serie2);
+                        Administrador.message += serie2.id + "---" + "(Winner!) qFight -> qWinners/n";
                     }
-                } else if (p < 0.67) {
-                    //las series empatan, se encolan donde estaban
-                    Interfaz.qFight.enqueue(s1);
-                    Interfaz.qFight.enqueue(s2);
+                } else if (p <= 0.67) {
+                    //B
+                    //Se empata, se devuelven a qFight
+                    Administrador.message += serie1.id + serie2.id + "---" + "(Tie!) qFight -> qFight/n";
+                    serie1.setPriority(0);
+                    serie2.setPriority(0);
+                    Interfaz.qFight.enqueue(serie1);
+                    Interfaz.qFight.enqueue(serie2);
                 } else {
-                    //ambas son mi**da, de vuelta a refuerzo
-                    Interfaz.qReinforce.enqueue(s1);
-                    Interfaz.qReinforce.enqueue(s2);
+                    //Por falta de calidad, se devuelven a qReinforce
+                    //C
+                    Administrador.message += serie1.id + serie2.id + "---" + "(Low Quality!) qFight -> qReinforce/n";
+                    serie1.setPriority(0);
+                    serie2.setPriority(0);
+                    Interfaz.qReinforce.enqueue(serie1);
                 }
                 //Suelta el mutex
                 Interfaz.mutex.release();
-                
+
             } catch (InterruptedException ex) {
                 Logger.getLogger(Procesador.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
+
+        } else {
+
+            Administrador.message += "(Failed to battle)/n";
         }
-            
-        
-        
+
     }
-    
+
 }

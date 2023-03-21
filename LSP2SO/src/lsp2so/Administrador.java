@@ -22,18 +22,18 @@ import lsp2so.Queue;
  * @author matteosancio
  */
 public class Administrador extends Thread {
-
+    
     int duracionDiaEnSegundos = 1;
     int cycleCount; //TODO: agregar que cada 4 series revisadas el administrador agrega una nueva serie a la cola de su nivel correspondiente
-    String message;
+    static String message;
     int counterForMessage = 1;
     int counterForNewSeries;
     JTextArea textArea;
-
+    
     public Administrador(int tiempo, Queue q1, Queue q2, Queue q3, Queue qReinforce, Queue toFight) {
         this.duracionDiaEnSegundos = tiempo;
     }
-
+    
     public void uppingCountersForEachNode() {
         //Funcion que actualiza todos los counters de cada serie. Se utiliza cuando el Administrador empieza a trabajar
 
@@ -43,7 +43,7 @@ public class Administrador extends Thread {
         Nodo lastNode = new Nodo();
         aux = Interfaz.q1.getFront();
         lastNode = Interfaz.q2.getRear();
-
+        
         if (!Interfaz.q1.isEmpty()) {
             while (aux != lastNode) {
                 serie = (Serie) aux.getInfo();
@@ -84,9 +84,9 @@ public class Administrador extends Thread {
                 aux = aux.getpNext();
             }
         }
-
+        
     }
-
+    
     public void checkingQ1() {
         Serie serie = new Serie();
         if (!Interfaz.q1.isEmpty()) {
@@ -98,7 +98,7 @@ public class Administrador extends Thread {
             Interfaz.qFight.enqueue(serie);
         }
     }
-
+    
     public void checkingQ2() {
         Serie serie = new Serie();
         serie = Interfaz.q2.dequeue();
@@ -111,7 +111,7 @@ public class Administrador extends Thread {
                 serie.resettingCounter();
                 message += serie.id + "---" + "(UppingPriority) q2 -> q1/n";
                 Interfaz.q1.enqueue(serie);
-
+                
             } else {
                 //Se sube el contador y se vuelve a encolar
                 serie.uppingCounter();
@@ -124,9 +124,9 @@ public class Administrador extends Thread {
             message += serie.id + "---" + "(Preempt) q2 -> Fight!/n";
             Interfaz.qFight.enqueue(serie);
         }
-
+        
     }
-
+    
     public void checkingQ3() {
         Serie serie = new Serie();
         serie = Interfaz.q3.dequeue();
@@ -138,23 +138,23 @@ public class Administrador extends Thread {
                 serie.resettingCounter();
                 message += serie.id + "---" + "(UppingPriority) q3 -> q2";
                 Interfaz.q2.enqueue(serie);
-
+                
             } else {
                 //Se sube el contador y se vuelve a encolar
                 serie.uppingCounter();
                 Interfaz.q3.enqueue(serie);
             }
-
+            
         } else {
             //Preempt
             serie.setPriority(0);
             serie.resettingCounter();
             Interfaz.qFight.enqueue(serie);
-
+            
         }
-
+        
     }
-
+    
     public void checkingQReinforce() {
         Serie serie = new Serie();
         Random generator = new Random();
@@ -163,35 +163,43 @@ public class Administrador extends Thread {
         serie.setQuality();
         //si la serie ahora sí es de calidad:
         double rand = generator.nextDouble();
-
+        
         if (rand <= 0.40) {
             //Va para q1
+            serie.setPriority(1);
             Interfaz.q1.enqueue(serie);
         } else {
             //Regresa a su cola de prioridad previa
             switch (serie.getPriority()) {
+                case 0:
+                    message += serie.id + "---" + "(Reinforce) qReinforce -> qFight/n";
+                    Interfaz.qFight.enqueue(serie);
+                    break;
                 case 1:
+                    message += serie.id + "---" + "(Reinforce) qReinforce -> q1/n";
                     Interfaz.q1.enqueue(serie);
                     break;
                 case 2:
+                    message += serie.id + "---" + "(Reinforce) qReinforce -> q2/n";
                     Interfaz.q2.enqueue(serie);
                     break;
                 case 3:
+                    message += serie.id + "---" + "(Reinforce) qReinforce -> q3/n";
                     Interfaz.q3.enqueue(serie);
                     break;
                 default:
                     break;
             }
         }
-
+        
     }
-
+    
     public void checkingForNewSeries() {
         //TODO: HAY QUE ACTUALIZAR EL COUNTERFORNEWSERIES EN LA INTELIGENCIA ARTIFICIAL, CADA 2 COMBATES SE DEBE DE CREAR UNA NUEVA SERIE, EL PROCESADOR SE ENCARGA DE ESTO ACTUALIZAR EL CONTADOR, EL ADMIN SOLO DE CREAR LA SERIE
         Serie newSeries = new Serie();
         if (counterForNewSeries == 4) {
             Random rand = new Random();
-
+            
             if (rand.nextDouble() <= 0.70) {
                 newSeries.setDataForNewSeries();
                 switch (newSeries.getPriority()) {
@@ -206,19 +214,19 @@ public class Administrador extends Thread {
                         break;
                     default:
                         break;
-
+                    
                 }
                 message += newSeries.id + "---" + "(Creation)  -> q" + newSeries.getPriority() + "/n";
             }
-
+            
         }
     }
-
+    
     public void updateActionLog() {
         //TODO para que se actualice hay que utilizar setJTextArea(actionLog) en la interfaz
         textArea.setText(message);
     }
-
+    
     public void setTextArea(JTextArea textArea) {
         this.textArea = textArea;
     }
@@ -228,7 +236,7 @@ public class Administrador extends Thread {
         try {
             while (true) {
                 Serie newSeries = new Serie();
-
+                
                 sleep(duracionDiaEnSegundos * 1000);
                 //Se adquiere permisos en el mutex
                 Interfaz.mutex.acquire();
@@ -262,5 +270,5 @@ public class Administrador extends Thread {
         } catch (Exception e) {
         }
     }
-
+    
 }
