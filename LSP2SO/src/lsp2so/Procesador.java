@@ -83,54 +83,68 @@ public class Procesador extends Thread {
     public void run() {
         Serie serie1 = new Serie();
         Serie serie2 = new Serie();
+        String working = "WORKING";
+        String idle = "IDLE";
         while (true) {
             try {
                 Interfaz.mutex.acquire();
                 if (Interfaz.qFight.queueSize() >= 2) {
                     Random rand = new Random();
 
-                    statusTextField.setText("WORKING");
-                    serie1 = (Serie) Interfaz.qFight.dequeue();
-                    serie2 = (Serie) Interfaz.qFight.dequeue();
+                    serie1 = (Serie) Interfaz.qFight.deQueue();
+                    serie2 = (Serie) Interfaz.qFight.deQueue();
 
                     //15 segundos mientras las series "batallan"
+                    statusTextField.setText(working);
+                    System.out.println("working");
                     Thread.sleep(tiempo);
+
+                    //Se colocan en el arenaTextArea las series que pelean
+                    String message = serie1.id + "---" + serie1.type + "\n" + "-------------VS-------------" + "\n" + serie2.id + "---" + serie2.type + "\n";
+
+                    statusArenaTextArea.setText(message);
 
                     //a decidir el ganador!!
                     //A
                     double p = rand.nextDouble();
                     if (p <= 0.4) {
                         //alguna de las dos series saldrá al mercado
+                        Administrador.counterForWinners++;
                         if (p <= 0.2) {
                             Administrador.message += serie1.id + "---" + "(Winner!) qFight -> qWinners\n";
-                            Interfaz.qWinners.enqueue(serie1);
+                            Interfaz.qWinners.enQueue(serie1);
                         } else {
-                            Interfaz.qWinners.enqueue(serie2);
+                            Interfaz.qWinners.enQueue(serie2);
                             Administrador.message += serie2.id + "---" + "(Winner!) qFight -> qWinners\n";
                         }
-                    } else if (p <= 0.67) {
-                        //B
-                        //Se empata, se devuelven a qFight
-                        Administrador.message += serie1.id + serie2.id + "---" + "(Tie!) qFight -> qFight\n";
-                        serie1.setPriority(0);
-                        serie2.setPriority(0);
-                        Interfaz.qFight.enqueue(serie1);
-                        Interfaz.qFight.enqueue(serie2);
                     } else {
-                        //Por falta de calidad, se devuelven a qReinforce
-                        //C
-                        Administrador.message += serie1.id + serie2.id + "---" + "(Low Quality!) qFight -> qReinforce\n";
-                        serie1.setPriority(0);
-                        serie2.setPriority(0);
-                        Interfaz.qReinforce.enqueue(serie1);
+                        if (p > 0.4 && p <= 0.67) {
+                            //B
+                            //Se empata, se devuelven a qFight
+                            Administrador.message += serie1.id + serie2.id + "---" + "(Tie!) qFight -> qFight\n";
+                            serie1.setPriority(0);
+                            serie2.setPriority(0);
+                            Interfaz.qFight.enQueue(serie1);
+                            Interfaz.qFight.enQueue(serie2);
+
+                        } else {
+                            //Por falta de calidad, se devuelven a qReinforce
+                            //C
+                            Administrador.message += serie1.id + serie2.id + "---" + "(Low Quality!) qFight -> qReinforce\n";
+                            serie1.setPriority(0);
+                            serie2.setPriority(0);
+                            Interfaz.qReinforce.enQueue(serie1);
+                            Interfaz.qReinforce.enQueue(serie2);
+
+                        }
                     }
                     //Suelta el mutex
-                    statusTextField.setText("IDLE");
+                    statusTextField.setText(idle);
                     Interfaz.counterForNewSeries++;
                     Interfaz.mutex.release();
 
                 } else {
-                    statusTextField.setText("IDLE");
+                    statusTextField.setText(idle);
                     Interfaz.mutex.release();
 
                 }

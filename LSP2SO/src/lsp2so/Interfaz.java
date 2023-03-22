@@ -40,7 +40,7 @@ public class Interfaz extends javax.swing.JFrame {
         initComponents();
     }
 
-    public void create6NewSeriesToStart() {
+    public void create10NewSeriesToStart() {
         Serie newSeries1 = new Serie();
         newSeries1.setDataForNewSeries();
         Serie newSeries2 = new Serie();
@@ -64,39 +64,39 @@ public class Interfaz extends javax.swing.JFrame {
 
         switch (newSeries1.getPriority()) {
             case 1:
-                Interfaz.q1.enqueue(newSeries1);
+                Interfaz.q1.enQueue(newSeries1);
                 break;
             case 2:
-                Interfaz.q2.enqueue(newSeries1);
+                Interfaz.q2.enQueue(newSeries1);
                 break;
             case 3:
-                Interfaz.q3.enqueue(newSeries1);
+                Interfaz.q3.enQueue(newSeries1);
                 break;
             default:
                 break;
         }
         switch (newSeries2.getPriority()) {
             case 1:
-                Interfaz.q1.enqueue(newSeries2);
+                Interfaz.q1.enQueue(newSeries2);
                 break;
             case 2:
-                Interfaz.q2.enqueue(newSeries2);
+                Interfaz.q2.enQueue(newSeries2);
                 break;
             case 3:
-                Interfaz.q3.enqueue(newSeries2);
+                Interfaz.q3.enQueue(newSeries2);
                 break;
             default:
                 break;
         }
         switch (newSeries3.getPriority()) {
             case 1:
-                Interfaz.q1.enqueue(newSeries3);
+                Interfaz.q1.enQueue(newSeries3);
                 break;
             case 2:
-                Interfaz.q2.enqueue(newSeries3);
+                Interfaz.q2.enQueue(newSeries3);
                 break;
             case 3:
-                Interfaz.q3.enqueue(newSeries3);
+                Interfaz.q3.enQueue(newSeries3);
                 break;
             default:
                 break;
@@ -104,13 +104,13 @@ public class Interfaz extends javax.swing.JFrame {
 
         switch (newSeries4.getPriority()) {
             case 1:
-                Interfaz.q1.enqueue(newSeries4);
+                Interfaz.q1.enQueue(newSeries4);
                 break;
             case 2:
-                Interfaz.q2.enqueue(newSeries4);
+                Interfaz.q2.enQueue(newSeries4);
                 break;
             case 3:
-                Interfaz.q3.enqueue(newSeries4);
+                Interfaz.q3.enQueue(newSeries4);
                 break;
             default:
                 break;
@@ -118,13 +118,13 @@ public class Interfaz extends javax.swing.JFrame {
 
         switch (newSeries5.getPriority()) {
             case 1:
-                Interfaz.q1.enqueue(newSeries5);
+                Interfaz.q1.enQueue(newSeries5);
                 break;
             case 2:
-                Interfaz.q2.enqueue(newSeries5);
+                Interfaz.q2.enQueue(newSeries5);
                 break;
             case 3:
-                Interfaz.q3.enqueue(newSeries5);
+                Interfaz.q3.enQueue(newSeries5);
                 break;
             default:
                 break;
@@ -132,69 +132,69 @@ public class Interfaz extends javax.swing.JFrame {
 
         switch (newSeries6.getPriority()) {
             case 1:
-                Interfaz.q1.enqueue(newSeries6);
+                Interfaz.q1.enQueue(newSeries6);
                 break;
             case 2:
-                Interfaz.q2.enqueue(newSeries6);
+                Interfaz.q2.enQueue(newSeries6);
                 break;
             case 3:
-                Interfaz.q3.enqueue(newSeries6);
+                Interfaz.q3.enQueue(newSeries6);
                 break;
             default:
                 break;
         }
-        
+
         switch (newSeries7.getPriority()) {
             case 1:
-                Interfaz.q1.enqueue(newSeries7);
+                Interfaz.q1.enQueue(newSeries7);
                 break;
             case 2:
-                Interfaz.q2.enqueue(newSeries7);
+                Interfaz.q2.enQueue(newSeries7);
                 break;
             case 3:
-                Interfaz.q3.enqueue(newSeries7);
+                Interfaz.q3.enQueue(newSeries7);
                 break;
             default:
                 break;
         }
-        
+
         switch (newSeries8.getPriority()) {
             case 1:
-                Interfaz.q1.enqueue(newSeries8);
+                Interfaz.q1.enQueue(newSeries8);
                 break;
             case 2:
-                Interfaz.q2.enqueue(newSeries8);
+                Interfaz.q2.enQueue(newSeries8);
                 break;
             case 3:
-                Interfaz.q3.enqueue(newSeries8);
+                Interfaz.q3.enQueue(newSeries8);
                 break;
             default:
                 break;
         }
-        
+
         switch (newSeries9.getPriority()) {
             case 1:
-                Interfaz.q1.enqueue(newSeries9);
+                Interfaz.q1.enQueue(newSeries9);
                 break;
             case 2:
-                Interfaz.q2.enqueue(newSeries9);
+                Interfaz.q2.enQueue(newSeries9);
                 break;
             case 3:
-                Interfaz.q3.enqueue(newSeries9);
+                Interfaz.q3.enQueue(newSeries9);
                 break;
             default:
                 break;
         }
-        
+
         switch (newSeries10.getPriority()) {
             case 1:
-                Interfaz.q1.enqueue(newSeries10);
+                Interfaz.q1.enQueue(newSeries10);
                 break;
             case 2:
-                Interfaz.q2.enqueue(newSeries10);
+                Interfaz.q2.enQueue(newSeries10);
                 break;
             case 3:
-                Interfaz.q3.enqueue(newSeries10);
+                Interfaz.q3.enQueue(newSeries10);
                 break;
             default:
                 break;
@@ -287,7 +287,7 @@ public class Interfaz extends javax.swing.JFrame {
         q1TextArea.setRows(5);
         jScrollPane2.setViewportView(q1TextArea);
 
-        jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 390, 150, 130));
+        jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 390, 180, 130));
 
         jLabel3.setBackground(new java.awt.Color(255, 255, 255));
         jLabel3.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -300,13 +300,13 @@ public class Interfaz extends javax.swing.JFrame {
         q2TextArea.setRows(5);
         jScrollPane3.setViewportView(q2TextArea);
 
-        jPanel1.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 390, 150, 130));
+        jPanel1.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 390, 180, 130));
 
         q3TextArea.setColumns(20);
         q3TextArea.setRows(5);
         jScrollPane4.setViewportView(q3TextArea);
 
-        jPanel1.add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 390, 150, 130));
+        jPanel1.add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 390, 180, 130));
 
         qReinforceTextArea.setColumns(20);
         qReinforceTextArea.setRows(5);
@@ -319,26 +319,32 @@ public class Interfaz extends javax.swing.JFrame {
         jLabel4.setForeground(new java.awt.Color(0, 0, 255));
         jLabel4.setText("Cola de prioridad #1");
         jLabel4.setOpaque(true);
-        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 370, -1, -1));
+        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 370, 160, -1));
 
         jLabel5.setBackground(new java.awt.Color(255, 255, 255));
         jLabel5.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(0, 255, 0));
         jLabel5.setText("Cola de prioridad #2");
         jLabel5.setOpaque(true);
-        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 370, -1, -1));
+        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 370, 160, -1));
 
         jLabel6.setBackground(new java.awt.Color(255, 255, 255));
         jLabel6.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(204, 204, 0));
         jLabel6.setText("Cola de prioridad #3");
         jLabel6.setOpaque(true);
-        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 370, -1, -1));
+        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 370, 160, -1));
 
         jLabel7.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel7.setText("Status");
         jLabel7.setOpaque(true);
         jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 120, -1, -1));
+
+        processorStatusTextField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                processorStatusTextFieldActionPerformed(evt);
+            }
+        });
         jPanel1.add(processorStatusTextField, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 120, 110, -1));
 
         jLabel8.setBackground(new java.awt.Color(255, 255, 255));
@@ -393,7 +399,7 @@ public class Interfaz extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane7)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 213, Short.MAX_VALUE)
+                                .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 262, Short.MAX_VALUE)
                                 .addContainerGap())
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addGap(0, 0, Short.MAX_VALUE)
@@ -435,9 +441,8 @@ public class Interfaz extends javax.swing.JFrame {
 
         tProcesador.setStatusTextField(processorStatusTextField);
         tProcesador.setStatusArenaTextArea(qFightTextArea);
-        processorStatusTextField.setText("IDLE");
 
-        create6NewSeriesToStart();
+        create10NewSeriesToStart();
 
         tAdmin.start();
         tProcesador.start();
@@ -456,6 +461,10 @@ public class Interfaz extends javax.swing.JFrame {
             break;
         }
     }//GEN-LAST:event_agregarVariableActionPerformed
+
+    private void processorStatusTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_processorStatusTextFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_processorStatusTextFieldActionPerformed
 
     /**
      * @param args the command line arguments

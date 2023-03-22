@@ -30,29 +30,11 @@ public class Queue<T> {
     }
 
     /**
-     *
-     * @param valor
-     * @return de tipo booleano para saber si un elemento se encuentra o no en
-     * la cola
-     */
-    public boolean existe(T valor) {
-        Nodo<T> aux = front;
-        while (aux != null) {
-            if (aux.getInfo() == valor) {
-                return true;
-            }
-            aux = aux.getpNext();
-        }
-
-        return false;
-    }
-
-    /**
      * Encola el elemento suministrado por el usuario de tipo T
      *
      * @param x
      */
-    public void enqueue(T x) {
+    public void enQueue(T x) {
 
         Nodo<T> node = new Nodo<>();
         node.setInfo(x);
@@ -72,35 +54,11 @@ public class Queue<T> {
     }
 
     /**
-     * Imnprime los elementos de la cola
-     */
-    public void printQueue() {
-        if (!isEmpty()) {
-            Nodo<T> temp = front;
-            while (temp != null) {
-                System.out.print(temp.getInfo() + "->");
-                temp = temp.getpNext();
-            }
-            System.out.println("null");
-        } else {
-            System.out.println("Queue is empty.");
-        }
-    }
-
-    /**
-     *
-     * @return
-     */
-    public int queueSize() {
-        return size;
-    }
-
-    /**
      * Se desencola el primer elemento en ingresar a la cola
      *
      * @return tipo de dato T
      */
-    public T dequeue() {
+    public T deQueue() {
         if (!isEmpty()) {
             Nodo<T> aux = front;
             front = front.getpNext();
@@ -110,10 +68,18 @@ public class Queue<T> {
             size--;
             return aux.getInfo();
         } else {
-            System.out.println("queue is empty.");
+            //Queue is empty
         }
 
         return null;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public int queueSize() {
+        return size;
     }
 
     public Nodo<T> getFront() {

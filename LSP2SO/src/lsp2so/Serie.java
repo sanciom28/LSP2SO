@@ -155,7 +155,9 @@ public class Serie {
     }
 
     public void uppingCounter() {
-        this.counterForUppingPriority++;
+        if (counterForUppingPriority < 8) {
+            this.counterForUppingPriority++;
+        }
     }
 
     public void resettingCounter() {
