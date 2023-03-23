@@ -1,7 +1,6 @@
 package lsp2so;
 
 import java.util.Random;
-import lsp2so.Interfaz;
 
 /**
  *
@@ -19,6 +18,8 @@ public class Serie {
     boolean cierreQuality = false;
     boolean creditosQuality = false;
     boolean quality = false;
+    static boolean shaggy = false;
+    static boolean summer = false;
 
     public Serie() {
 
@@ -101,7 +102,7 @@ public class Serie {
             this.id = "R" + Integer.toString(Interfaz.idHelperRM);
         }
     }
-    
+
     public void setType(int n) {
 
         if (n < 0.5) {
@@ -120,18 +121,28 @@ public class Serie {
         setDurationAndPriority();
         setIdAndType();
         setQuality();
+        
+        if (this.shaggy && "VELMA".equals(this.type)) {
+            setDataForNewSeriesVelma();
+        }
+        else if (this.summer && "RICK&MORTY".equals(this.type)) {
+            setDataForNewSeriesRM();
+        }
+
     }
-    
+
     public void setDataForNewSeriesVelma() {
-        setDurationAndPriority();
-        setType((int) 0.2);
+        //Si agregas a shaggy entonces todas las nuevas series van a la cola de prioridad 1
+        this.priority = 1;
+        this.type = "VELMA";
         setQuality();
     }
-    
+
     public void setDataForNewSeriesRM() {
+        //Si agregas a Summer entonces todas las nuevas series son de calidads
         setDurationAndPriority();
-        setType((int) 0.7);
-        setQuality();
+        this.type = "RICK & MORTY";
+        this.quality = true;
     }
 
     public void uppingCounter() {

@@ -71,7 +71,7 @@ public class Interfaz extends javax.swing.JFrame {
                 serie.id = dataSplit[1];
                 serie.type = dataSplit[2];
                 qWinners.enQueue(serie);
-                
+
                 helper = dataSplit[1];
                 char helperChar = helper.charAt(0);
                 if (helperChar == 'V') {
@@ -539,7 +539,7 @@ public class Interfaz extends javax.swing.JFrame {
     private void iniciarSimulacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_iniciarSimulacionActionPerformed
         velmaFinalCount = 0;
         rmFinalCount = 0;
-        
+
         tAdmin.setTextAreaActionLog(actionLogTextArea);
         tAdmin.setTextAreaQ1(q1TextArea);
         tAdmin.setTextAreaQ2(q2TextArea);
@@ -552,7 +552,7 @@ public class Interfaz extends javax.swing.JFrame {
         tProcesador.setStatusArenaTextArea(qFightTextArea);
 
         create10NewSeriesToStart();
-        
+
         leer();
         tAdmin.start();
         tProcesador.start();
@@ -585,11 +585,11 @@ public class Interfaz extends javax.swing.JFrame {
                     break;
                 default:
                     break;
-                }
-            //custom
-                
             }
-        
+            //custom
+
+        }
+
     }//GEN-LAST:event_agregarVariableActionPerformed
 
     private void processorStatusTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_processorStatusTextFieldActionPerformed
@@ -620,21 +620,43 @@ public class Interfaz extends javax.swing.JFrame {
 
     private void modificarTiempoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modificarTiempoActionPerformed
         while (true) {
+            int inputShaggy;
+            int inputSummer;
             String inputSecondsAsDays = JOptionPane.showInputDialog(null, "Tiempo (en segundos) que dura un dia: ");
-            int countTemp = 1;
+            int countTemp;
             try {
                 countTemp = Integer.parseInt(inputSecondsAsDays);
                 if (countTemp < 0) {
                     throw new IllegalArgumentException();
+
                 } else {
                     duracionDeDiaEnSegundos = countTemp;
                 }
 
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(null, "Ha ocurrido un error, ¡por favor ingrese valores correctos!");
+                break;
             }
-            break;
+
+            try {
+                inputShaggy = Integer.parseInt(JOptionPane.showInputDialog(null, "Quieres ingresar a Shaggy? (1) para si o (2) para no. Shaggy hace que todas las series nuevas del tipo Velma vayan a la cola de prioridad"));
+                inputSummer = Integer.parseInt(JOptionPane.showInputDialog(null, "Quieres ingresar a Summer? (1) para si o (2) para no. Summer hace que todas las series nuevas del tipo R&M sean de calidad asegurada"));
+                if (inputShaggy == 1) {
+                    Serie.shaggy = true;
+                    JOptionPane.showMessageDialog(null, "Listo, Shaggy mandado");
+                }
+                if (inputSummer == 1) {
+                    Serie.summer = true;
+                    JOptionPane.showMessageDialog(null, "Listo, Summer mandado");
+                }
+                break;
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, "Ha ocurrido un error, ¡por favor ingrese valores correctos!");
+                break;
+            }
         }
+
+
     }//GEN-LAST:event_modificarTiempoActionPerformed
 
     private void iniciarSimulacionMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_iniciarSimulacionMouseEntered
