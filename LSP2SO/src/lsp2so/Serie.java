@@ -101,10 +101,36 @@ public class Serie {
             this.id = "R" + Integer.toString(Interfaz.idHelperRM);
         }
     }
+    
+    public void setType(int n) {
+
+        if (n < 0.5) {
+            this.type = "VELMA";
+            Interfaz.idHelperVelma++;
+            this.id = "V" + Integer.toString(Interfaz.idHelperVelma);
+
+        } else {
+            this.type = "RICK&MORTY";
+            Interfaz.idHelperRM++;
+            this.id = "R" + Integer.toString(Interfaz.idHelperRM);
+        }
+    }
 
     public void setDataForNewSeries() {
         setDurationAndPriority();
         setIdAndType();
+        setQuality();
+    }
+    
+    public void setDataForNewSeriesVelma() {
+        setDurationAndPriority();
+        setType((int) 0.2);
+        setQuality();
+    }
+    
+    public void setDataForNewSeriesRM() {
+        setDurationAndPriority();
+        setType((int) 0.7);
         setQuality();
     }
 

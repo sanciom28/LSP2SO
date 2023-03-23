@@ -304,7 +304,7 @@ public class Interfaz extends javax.swing.JFrame {
 
         agregarVariable.setFont(new java.awt.Font("Impact", 0, 18)); // NOI18N
         agregarVariable.setForeground(new java.awt.Color(204, 204, 204));
-        agregarVariable.setText("VARIABLES");
+        agregarVariable.setText("CREAR SERIE");
         agregarVariable.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         agregarVariable.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -388,7 +388,7 @@ public class Interfaz extends javax.swing.JFrame {
                 processorStatusTextFieldActionPerformed(evt);
             }
         });
-        jPanel1.add(processorStatusTextField, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 380, 120, 30));
+        jPanel1.add(processorStatusTextField, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 390, 120, 20));
 
         modificarTiempo.setFont(new java.awt.Font("Impact", 0, 18)); // NOI18N
         modificarTiempo.setForeground(new java.awt.Color(204, 204, 204));
@@ -559,7 +559,37 @@ public class Interfaz extends javax.swing.JFrame {
     }//GEN-LAST:event_iniciarSimulacionActionPerformed
 
     private void agregarVariableActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_agregarVariableActionPerformed
-        JOptionPane.showMessageDialog(null, "WIP");
+
+        String nombre = JOptionPane.showInputDialog(null, "Desea crear una serie Velma o Rick & Morty?: ");
+        Serie s = new Serie();
+        if (!"Velma".equals(nombre) && !"Rick & Morty".equals(nombre)) {
+            JOptionPane.showMessageDialog(null, "Por favor coloque el nombre de la serie deseada.");
+        } else {
+            if ("Velma".equals(nombre)) {
+                s.setDataForNewSeriesVelma();
+                JOptionPane.showMessageDialog(null, "Velma creada.");
+
+            } else if ("Rick & Morty".equals(nombre)) {
+                s.setDataForNewSeriesRM();
+                JOptionPane.showMessageDialog(null, "Rick & Morty creada.");
+            }
+            switch (s.getPriority()) {
+                case 1:
+                    Interfaz.q1.enQueue(s);
+                    break;
+                case 2:
+                    Interfaz.q2.enQueue(s);
+                    break;
+                case 3:
+                    Interfaz.q3.enQueue(s);
+                    break;
+                default:
+                    break;
+                }
+            //custom
+                
+            }
+        
     }//GEN-LAST:event_agregarVariableActionPerformed
 
     private void processorStatusTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_processorStatusTextFieldActionPerformed
