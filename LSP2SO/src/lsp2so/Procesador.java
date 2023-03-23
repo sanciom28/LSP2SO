@@ -14,7 +14,6 @@ public class Procesador extends Thread {
 
     int duracionDiaEnSegundos;
     int tiempo = 1000 * (4 + 1 + 10) * duracionDiaEnSegundos;
-    JTextField statusTextField;
     JTextArea statusArenaTextArea;
 
     public JTextArea getStatusArenaTextArea() {
@@ -29,20 +28,10 @@ public class Procesador extends Thread {
         this.duracionDiaEnSegundos = duracionDiaEnSegundos;
     }
 
-    public JTextField getStatusTextField() {
-        return statusTextField;
-    }
-
-    public void setStatusTextField(JTextField textField) {
-        this.statusTextField = textField;
-    }
-
     @Override
     public void run() {
         Serie serie1 = new Serie();
         Serie serie2 = new Serie();
-        String working = "WORKING";
-        String idle = "IDLE";
         while (true) {
             try {
                 Interfaz.mutex.acquire();
@@ -53,8 +42,6 @@ public class Procesador extends Thread {
                     serie2 = (Serie) Interfaz.qFight.deQueue();
 
                     //15 segundos mientras las series "batallan"
-                    statusTextField.setText(working);
-                    System.out.println("working");
                     Thread.sleep(tiempo);
 
                     //Se colocan en el arenaTextArea las series que pelean
@@ -67,7 +54,7 @@ public class Procesador extends Thread {
                     double p = rand.nextDouble();
                     if (p <= 0.4) {
                         //alguna de las dos series saldrá al mercado
-                        Administrador.counterForWinners++;
+
                         if (p <= 0.2) {
                             Administrador.message += serie1.id + "---" + "(Winner!) qFight -> qWinners\n";
                             Interfaz.qWinners.enQueue(serie1);
@@ -97,15 +84,20 @@ public class Procesador extends Thread {
                         }
                     }
                     //Suelta el mutex
-                    statusTextField.setText(idle);
+                    if (Interfaz.q1.isEmpty() && Interfaz.q2.isEmpty() && Interfaz.q3.isEmpty() && Interfaz.qReinforce.isEmpty() && Interfaz.qFight.getSize() <= 1) {
+                        //El programa ha terminado
+                        Interfaz.mutex.release();
+                        break;
+                    }
                     Interfaz.counterForNewSeries++;
                     Interfaz.mutex.release();
 
                 } else {
-                    statusTextField.setText(idle);
+
                     Interfaz.mutex.release();
 
                 }
+
             } catch (Exception e) {
             }
 

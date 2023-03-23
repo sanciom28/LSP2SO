@@ -1,8 +1,9 @@
 package lsp2so;
 
 import java.util.Random;
+import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
-import lsp2so.Queue;
+import javax.swing.JTextField;
 
 /**
  *
@@ -11,7 +12,6 @@ import lsp2so.Queue;
 public class Administrador extends Thread {
 
     int duracionDiaEnSegundos = 1;
-    int cycleCount; //TODO: agregar que cada 4 series revisadas el administrador agrega una nueva serie a la cola de su nivel correspondiente
     static String message = "";
     static String messageQ1 = "";
     static String messageQ2 = "";
@@ -21,7 +21,6 @@ public class Administrador extends Thread {
     static String messageQFight = "";
 
     int counterForMessage = 1;
-    public static int counterForWinners;
     JTextArea textAreaActionLog;
     JTextArea textAreaQ1;
     JTextArea textAreaQ2;
@@ -29,6 +28,7 @@ public class Administrador extends Thread {
     JTextArea textAreaQReinforce;
     JTextArea textAreaQWinners;
     JTextArea textAreaQFight;
+    JTextField textProcessorStatus;
 
     public Administrador(int tiempo, Queue q1, Queue q2, Queue q3, Queue qReinforce, Queue toFight) {
         this.duracionDiaEnSegundos = tiempo;
@@ -147,14 +147,16 @@ public class Administrador extends Thread {
         //Escribiendo los winners en el WinnersTextArea
         aux = Interfaz.qWinners.getFront();
         frontAux = Interfaz.qWinners.getRear();
+        int counterTemp = 1;
         if (!Interfaz.qWinners.isEmpty()) {
             size = Interfaz.qWinners.getSize();
             while (size != 0) {
                 serie = (Serie) Interfaz.qWinners.deQueue();
-                messageQWinners += counterForWinners + "---" + serie.id + "---" + serie.type + "---" + "q" + serie.priority + "\n";
+                messageQWinners += counterTemp + "//" + serie.id + "//" + serie.type + "\n";
                 textAreaQWinners.setText(messageQWinners);
                 Interfaz.qWinners.enQueue(serie);
                 size--;
+                counterTemp++;
             }
         } else {
             messageQWinners = "Empty";
@@ -321,6 +323,7 @@ public class Administrador extends Thread {
                 Thread.sleep(duracionDiaEnSegundos * 1000);
                 //Se adquiere permisos en el mutex
                 Interfaz.mutex.acquire();
+                textProcessorStatus.setText("IDLE");
                 //Se entra en la sección critica
                 message += "-------" + counterForMessage + "-------\n";
                 //Se actualizan los contadores de todas las series almacenadas en todas las colas
@@ -345,9 +348,18 @@ public class Administrador extends Thread {
                 updateActionLog();
 
                 //Suelta el mutex
+                if (Interfaz.q1.isEmpty() && Interfaz.q2.isEmpty() && Interfaz.q3.isEmpty() && Interfaz.qReinforce.isEmpty() && Interfaz.qFight.getSize() <= 1) {
+                    //El programa ha terminado
+                    Interfaz.mutex.release();
+                    JOptionPane.showMessageDialog(null, "El programa ha finalizado");
+                    break;
+                }
                 Interfaz.mutex.release();
                 counterForMessage++;
+                textProcessorStatus.setText("WORKING");
+
             }
+
         } catch (Exception e) {
         }
     }
@@ -403,4 +415,13 @@ public class Administrador extends Thread {
     public void setTextAreaQReinforce(JTextArea textAreaQReinforce) {
         this.textAreaQReinforce = textAreaQReinforce;
     }
+
+    public JTextField getTextProcessorStatus() {
+        return textProcessorStatus;
+    }
+
+    public void setTextProcessorStatus(JTextField textProcessorStatus) {
+        this.textProcessorStatus = textProcessorStatus;
+    }
+
 }

@@ -1,6 +1,15 @@
 package lsp2so;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintStream;
 import java.util.concurrent.Semaphore;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import lsp2so.Queue;
 import lsp2so.Serie;
@@ -15,6 +24,8 @@ public class Interfaz extends javax.swing.JFrame {
     public static int idHelperVelma = 0;
     public static int idHelperRM = 0;
     public static int counterForNewSeries = 0;
+    int velmaFinalCount;
+    int rmFinalCount;
 
     //Colas
     public static Queue<Serie> q1 = new Queue();
@@ -33,6 +44,51 @@ public class Interfaz extends javax.swing.JFrame {
     //Inicializando las variables
     public Interfaz() {
         initComponents();
+    }
+
+    public void escribir() {
+        try {
+            FileWriter myWriter = new FileWriter("results.txt");
+            myWriter.write(Administrador.messageQWinners);
+            myWriter.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void leer() {
+        String helper = "";
+        BufferedReader br;
+        try {
+            //Lectura
+            br = new BufferedReader(new FileReader("results.txt"));
+            while (br.ready()) {
+                Serie serie = new Serie();
+                String data = br.readLine();
+//                Administrador.messageQWinners += data;
+                String[] dataSplit = data.split("//");
+                serie.id = dataSplit[1];
+                serie.type = dataSplit[2];
+                qWinners.enQueue(serie);
+                
+                helper = dataSplit[1];
+                char helperChar = helper.charAt(0);
+                if (helperChar == 'V') {
+                    //Tenemos un ganador de Velma
+                    velmaFinalCount++;
+                } else if (helperChar == 'R') {
+                    //Tenemos un ganador de R&M
+                    rmFinalCount++;
+                }
+            }
+
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(Interfaz.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(Interfaz.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }
 
     public void create10NewSeriesToStart() {
@@ -227,16 +283,16 @@ public class Interfaz extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
         processorStatusTextField = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
-        background = new javax.swing.JLabel();
-        jLabel9 = new javax.swing.JLabel();
+        modificarTiempo = new javax.swing.JButton();
+        statisticsButton = new javax.swing.JButton();
         jLabel10 = new javax.swing.JLabel();
-        jLabel11 = new javax.swing.JLabel();
         jScrollPane6 = new javax.swing.JScrollPane();
         actionLogTextArea = new javax.swing.JTextArea();
-        jLabel12 = new javax.swing.JLabel();
+        background = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
         jScrollPane7 = new javax.swing.JScrollPane();
         qWinnersTextArea = new javax.swing.JTextArea();
+        jLabel12 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -348,15 +404,22 @@ public class Interfaz extends javax.swing.JFrame {
         jLabel8.setOpaque(true);
         jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 150, -1, -1));
 
-        jButton1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jButton1.setText("¿Cuál es la mejor serie?");
-        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 540, 210, -1));
+        modificarTiempo.setText("Modificar Tiempo");
+        modificarTiempo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                modificarTiempoActionPerformed(evt);
+            }
+        });
+        jPanel1.add(modificarTiempo, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 30, -1, -1));
 
-        background.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fotos/background.png"))); // NOI18N
-        jPanel1.add(background, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 0, 1030, 600));
-
-        jLabel9.setText("RECUERDA HACER LAS BENDITAS VALIDACIONES COÑO");
-        jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 140, 120, 110));
+        statisticsButton.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        statisticsButton.setText("¿Cuál es la mejor serie?");
+        statisticsButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                statisticsButtonActionPerformed(evt);
+            }
+        });
+        jPanel1.add(statisticsButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 530, 210, -1));
 
         jLabel10.setBackground(new java.awt.Color(255, 255, 255));
         jLabel10.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
@@ -364,68 +427,53 @@ public class Interfaz extends javax.swing.JFrame {
         jLabel10.setOpaque(true);
         jPanel1.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 80, -1, -1));
 
-        jLabel11.setBackground(new java.awt.Color(255, 255, 255));
-        jLabel11.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        jLabel11.setText("Action Log");
-        jLabel11.setOpaque(true);
-
         actionLogTextArea.setColumns(20);
         actionLogTextArea.setRows(5);
         jScrollPane6.setViewportView(actionLogTextArea);
 
-        jLabel12.setBackground(new java.awt.Color(255, 255, 255));
-        jLabel12.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        jLabel12.setText("Winners");
-        jLabel12.setOpaque(true);
+        jPanel1.add(jScrollPane6, new org.netbeans.lib.awtextra.AbsoluteConstraints(822, 50, 270, 260));
+
+        background.setIcon(new javax.swing.ImageIcon(getClass().getResource("/fotos/background.png"))); // NOI18N
+        jPanel1.add(background, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 830, 570));
+
+        jLabel11.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel11.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        jLabel11.setText("Action Log");
+        jLabel11.setOpaque(true);
+        jPanel1.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(900, 20, -1, -1));
 
         qWinnersTextArea.setColumns(20);
         qWinnersTextArea.setRows(5);
         jScrollPane7.setViewportView(qWinnersTextArea);
 
+        jPanel1.add(jScrollPane7, new org.netbeans.lib.awtextra.AbsoluteConstraints(850, 350, 202, 206));
+
+        jLabel12.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel12.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        jLabel12.setText("Winners");
+        jLabel12.setOpaque(true);
+        jPanel1.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 320, -1, -1));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 810, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane7)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 262, Short.MAX_VALUE)
-                                .addContainerGap())
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addComponent(jLabel11)
-                                .addGap(61, 61, 61))))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel12)
-                        .addGap(71, 71, 71))))
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 1100, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 574, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(26, 26, 26)
-                .addComponent(jLabel11)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel12)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane7)
-                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void iniciarSimulacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_iniciarSimulacionActionPerformed
+        velmaFinalCount = 0;
+        rmFinalCount = 0;
+        
         tAdmin.setTextAreaActionLog(actionLogTextArea);
         tAdmin.setTextAreaQ1(q1TextArea);
         tAdmin.setTextAreaQ2(q2TextArea);
@@ -433,33 +481,65 @@ public class Interfaz extends javax.swing.JFrame {
         tAdmin.setTextAreaQReinforce(qReinforceTextArea);
         tAdmin.setTextAreaQWinners(qWinnersTextArea);
         tAdmin.setTextAreaQFight(qFightTextArea);
+        tAdmin.setTextProcessorStatus(processorStatusTextField);
 
-        tProcesador.setStatusTextField(processorStatusTextField);
         tProcesador.setStatusArenaTextArea(qFightTextArea);
 
         create10NewSeriesToStart();
-
+        
+        leer();
         tAdmin.start();
         tProcesador.start();
     }//GEN-LAST:event_iniciarSimulacionActionPerformed
 
     private void agregarVariableActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_agregarVariableActionPerformed
+
+    }//GEN-LAST:event_agregarVariableActionPerformed
+
+    private void processorStatusTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_processorStatusTextFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_processorStatusTextFieldActionPerformed
+
+    private void statisticsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_statisticsButtonActionPerformed
+        if (mutex.availablePermits() == 0) {
+            JOptionPane.showMessageDialog(null, "Por favor, espere a que el programa finalice");
+        } else {
+            escribir();
+            leer();
+
+            if (velmaFinalCount > rmFinalCount) {
+                //Velma gano
+                JOptionPane.showMessageDialog(null, "Velma ha ganado con una mayoria de " + velmaFinalCount + " a " + rmFinalCount);
+            } else {
+                if (velmaFinalCount < rmFinalCount) {
+                    //R&M gano
+                    JOptionPane.showMessageDialog(null, "R&M ha ganado con una mayoria de " + rmFinalCount + " a " + velmaFinalCount);
+                } else {
+                    //Empataron
+                    JOptionPane.showMessageDialog(null, "Velma y R&M han empatado, HBO puede utilizar cualquiera de las dos");
+                }
+            }
+        }
+    }//GEN-LAST:event_statisticsButtonActionPerformed
+
+    private void modificarTiempoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modificarTiempoActionPerformed
         while (true) {
-            //TODO: AGREGAR OTRAS VARIABLES
             String inputSecondsAsDays = JOptionPane.showInputDialog(null, "Tiempo (en segundos) que dura un dia: ");
+            int countTemp = 1;
             try {
-                duracionDeDiaEnSegundos = Integer.parseInt(inputSecondsAsDays);
+                countTemp = Integer.parseInt(inputSecondsAsDays);
+                if (countTemp < 0) {
+                    throw new IllegalArgumentException();
+                } else {
+                    duracionDeDiaEnSegundos = countTemp;
+                }
 
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(null, "Ha ocurrido un error, ¡por favor ingrese valores correctos!");
             }
             break;
         }
-    }//GEN-LAST:event_agregarVariableActionPerformed
-
-    private void processorStatusTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_processorStatusTextFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_processorStatusTextFieldActionPerformed
+    }//GEN-LAST:event_modificarTiempoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -501,7 +581,6 @@ public class Interfaz extends javax.swing.JFrame {
     private javax.swing.JButton agregarVariable;
     private javax.swing.JLabel background;
     private javax.swing.JButton iniciarSimulacion;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -513,7 +592,6 @@ public class Interfaz extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
@@ -522,6 +600,7 @@ public class Interfaz extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JScrollPane jScrollPane7;
+    private javax.swing.JButton modificarTiempo;
     private javax.swing.JTextField processorStatusTextField;
     private javax.swing.JTextArea q1TextArea;
     private javax.swing.JTextArea q2TextArea;
@@ -529,5 +608,6 @@ public class Interfaz extends javax.swing.JFrame {
     private javax.swing.JTextArea qFightTextArea;
     private javax.swing.JTextArea qReinforceTextArea;
     private javax.swing.JTextArea qWinnersTextArea;
+    private javax.swing.JButton statisticsButton;
     // End of variables declaration//GEN-END:variables
 }

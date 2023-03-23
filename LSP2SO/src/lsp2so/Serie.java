@@ -70,13 +70,6 @@ public class Serie {
         this.priority = priority;
     }
 
-    public void setDataForNewSeries() {
-        setDurationAndPriority();
-        setIdAndType();
-        setQuality();
-
-    }
-
     public void setDurationAndPriority() {
         Random rand = new Random();
         double duration = rand.nextDouble();
@@ -100,13 +93,19 @@ public class Serie {
         if (generator < 0.5) {
             this.type = "VELMA";
             Interfaz.idHelperVelma++;
-            this.id = "V0" + Integer.toString(Interfaz.idHelperVelma);
+            this.id = "V" + Integer.toString(Interfaz.idHelperVelma);
 
         } else {
             this.type = "RICK&MORTY";
             Interfaz.idHelperRM++;
-            this.id = "R0" + Integer.toString(Interfaz.idHelperRM);
+            this.id = "R" + Integer.toString(Interfaz.idHelperRM);
         }
+    }
+
+    public void setDataForNewSeries() {
+        setDurationAndPriority();
+        setIdAndType();
+        setQuality();
     }
 
     public void uppingCounter() {
